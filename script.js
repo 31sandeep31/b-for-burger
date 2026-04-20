@@ -1,4 +1,22 @@
-// ===== SCROLL REVEAL =====
+// ===== THEME TOGGLE =====
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = themeToggle.querySelector('.theme-icon');
+const savedTheme = localStorage.getItem('bfb-theme') || 'dark';
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('bfb-theme', theme);
+}
+
+applyTheme(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+
 const reveals = document.querySelectorAll('.story, .menu-card, .step, .order-text, .story-card');
 reveals.forEach(el => el.classList.add('reveal'));
 
@@ -16,10 +34,11 @@ reveals.forEach(el => observer.observe(el));
 // ===== NAV SCROLL EFFECT =====
 const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => {
+  const style = getComputedStyle(document.documentElement);
   if (window.scrollY > 60) {
-    nav.style.background = 'rgba(10, 10, 10, 0.97)';
+    nav.style.background = style.getPropertyValue('--nav-bg-solid').trim();
   } else {
-    nav.style.background = 'rgba(10, 10, 10, 0.85)';
+    nav.style.background = style.getPropertyValue('--nav-bg').trim();
   }
 });
 
@@ -37,10 +56,10 @@ burgerBtn.addEventListener('click', () => {
     navLinks.style.top = '70px';
     navLinks.style.left = '0';
     navLinks.style.right = '0';
-    navLinks.style.background = 'rgba(10,10,10,0.97)';
+    navLinks.style.background = 'var(--nav-bg-solid)';
     navLinks.style.padding = '20px 32px 28px';
     navLinks.style.gap = '20px';
-    navLinks.style.borderBottom = '1px solid rgba(124,181,24,0.15)';
+    navLinks.style.borderBottom = '1px solid var(--border-green)';
   } else {
     navLinks.style.display = '';
   }
